@@ -133,7 +133,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
 
             var authResponse = ProcessRequest<DiskStationAuthResponse>(requestBuilder, "login", DiskStationApi.Auth, settings);
 
-            return authResponse.Data.SId;
+            return "\"" + authResponse.Data.SId + "\"";
         }
 
         protected HttpRequestBuilder BuildRequest(DownloadStationSettings settings, string methodName, int apiVersion, HttpMethod httpVerb = HttpMethod.GET)
