@@ -35,6 +35,7 @@ class QualityProfileItem extends Component {
 
   render() {
     const {
+      advancedSettings,
       groupId,
       name,
       allowed,
@@ -64,7 +65,7 @@ class QualityProfileItem extends Component {
         </label>
 
         {
-          !groupId &&
+          advancedSettings && !groupId &&
             <IconButton
               className={styles.createGroupButton}
               name={icons.ADD}
@@ -89,6 +90,7 @@ class QualityProfileItem extends Component {
 }
 
 QualityProfileItem.propTypes = {
+  advancedSettings: PropTypes.bool,
   groupId: PropTypes.number,
   qualityId: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,

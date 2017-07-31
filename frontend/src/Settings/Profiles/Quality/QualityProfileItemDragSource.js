@@ -160,6 +160,7 @@ class QualityProfileItemDragSource extends Component {
         {
           qualityId != null &&
             <QualityProfileItem
+              advancedSettings={advancedSettings}
               groupId={groupId}
               qualityId={qualityId}
               name={name}

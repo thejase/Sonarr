@@ -91,23 +91,22 @@ class QualityProfileItemGroup extends Component {
           </label>
 
           {
-          advancedSettings &&
-            <IconButton
-              className={styles.deleteGroupButton}
-              name={icons.REMOVE}
-              onPress={this.onDeleteGroupPress}
-            />
-        }
+            advancedSettings &&
+              <IconButton
+                className={styles.deleteGroupButton}
+                name={icons.REMOVE}
+                onPress={this.onDeleteGroupPress}
+              />
+          }
 
           {
-            advancedSettings &&
-              connectDragSource(
-                <div className={styles.dragHandle}>
-                  <Icon
-                    className={styles.dragIcon}
-                    name={icons.REORDER}
-                  />
-                </div>
+            connectDragSource(
+              <div className={styles.dragHandle}>
+                <Icon
+                  className={styles.dragIcon}
+                  name={icons.REORDER}
+                />
+              </div>
               )
           }
         </div>
