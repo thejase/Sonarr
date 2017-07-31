@@ -17,6 +17,7 @@ import styles from './EditQualityProfileModalContent.css';
 
 function EditQualityProfileModalContent(props) {
   const {
+    advancedSettings,
     isFetching,
     error,
     isSaving,
@@ -86,6 +87,7 @@ function EditQualityProfileModalContent(props) {
               </FormGroup>
 
               <QualityProfileItems
+                advancedSettings={advancedSettings}
                 qualityProfileItems={items.value}
                 errors={items.errors}
                 warnings={items.warnings}
@@ -132,6 +134,7 @@ function EditQualityProfileModalContent(props) {
 }
 
 EditQualityProfileModalContent.propTypes = {
+  advancedSettings: PropTypes.bool.isRequired,
   isFetching: PropTypes.bool.isRequired,
   error: PropTypes.object,
   isSaving: PropTypes.bool.isRequired,

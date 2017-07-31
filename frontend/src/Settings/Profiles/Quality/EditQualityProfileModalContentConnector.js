@@ -47,11 +47,13 @@ function createQualitiesSelector() {
 
 function createMapStateToProps() {
   return createSelector(
+    (state) => state.settings.advancedSettings,
     createProviderSettingsSelector(),
     createQualitiesSelector(),
     createProfileInUseSelector('qualityProfileId'),
-    (qualityProfile, qualities, isInUse) => {
+    (advancedSettings, qualityProfile, qualities, isInUse) => {
       return {
+        advancedSettings,
         qualities,
         ...qualityProfile,
         isInUse
