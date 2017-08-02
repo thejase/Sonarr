@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import Measure from 'react-measure';
 import { icons } from 'Helpers/Props';
+import dimensions from 'Styles/Variables/dimensions';
 import IconButton from 'Components/Link/IconButton';
 import FormGroup from 'Components/Form/FormGroup';
 import FormLabel from 'Components/Form/FormLabel';
@@ -9,7 +11,57 @@ import QualityProfileItemDragSource from './QualityProfileItemDragSource';
 import QualityProfileItemDragPreview from './QualityProfileItemDragPreview';
 import styles from './QualityProfileItems.css';
 
+const ITEM_HEIGHT = parseInt(dimensions.qualityProfileItemHeight);
+const ITEM_PADDING = parseInt(dimensions.qualityProfileItemDragSourcePadding);
+
 class QualityProfileItems extends Component {
+
+  //
+  // Lifecycle
+
+  constructor(props, context) {
+    super(props, context);
+
+    this.state = {
+      qualitiesHeight: 0,
+      qualitiesHeightEditGroups: 0
+    };
+  }
+
+  //
+  // Listeners
+
+  onMeasure = ({ height }) => {
+    const editGroups = this.props.editGroups;
+
+    const {
+      qualitiesHeight,
+      qualitiesHeightEditGroups
+    } = this.state;
+
+    const heightState = editGroups ?
+      qualitiesHeightEditGroups :
+      qualitiesHeight;
+
+    if (heightState !== height) {
+      // Add the item height + padding
+      const newHeight = height + ITEM_HEIGHT + (ITEM_PADDING * 2);
+
+      if (editGroups) {
+        this.setState({
+          qualitiesHeightEditGroups: newHeight
+        });
+      } else {
+        this.setState({
+          qualitiesHeight: newHeight
+        });
+      }
+    }
+  }
+
+  onToggleEditGroupsMode = () => {
+    this.props.onToggleEditGroupsMode();
+  }
 
   //
   // Render
@@ -22,10 +74,15 @@ class QualityProfileItems extends Component {
       qualityProfileItems,
       errors,
       warnings,
-      onToggleEditGroupsMode,
       ...otherProps
     } = this.props;
 
+    const {
+      qualitiesHeight,
+      qualitiesHeightEditGroups
+    } = this.state;
+
+    const qualitiesMinHeight = editGroups ? qualitiesHeightEditGroups : qualitiesHeight;
     const isDragging = dropIndex !== null;
     const isDraggingUp = isDragging && dropIndex > dragIndex;
     const isDraggingDown = isDragging && dropIndex <= dragIndex;
@@ -39,7 +96,7 @@ class QualityProfileItems extends Component {
             className={styles.editGroupsButton}
             name={editGroups ? icons.REORDER : icons.GROUP}
             title={editGroups ? 'Reorder' : 'Edit Groups'}
-            onPress={onToggleEditGroupsMode}
+            onPress={this.onToggleEditGroupsMode}
           />
         </FormLabel>
 
@@ -74,33 +131,42 @@ class QualityProfileItems extends Component {
             })
           }
 
-          <div className={styles.qualities}>
-            {
-              qualityProfileItems.map(({ id, name, allowed, quality, items }, index) => {
-                const identifier = quality ? quality.id : id;
+          <Measure
+            whitelist={['height']}
+            includeMargin={false}
+            onMeasure={this.onMeasure}
+          >
+            <div
+              className={styles.qualities}
+              style={{ minHeight: `${qualitiesMinHeight}px` }}
+            >
+              {
+                qualityProfileItems.map(({ id, name, allowed, quality, items }, index) => {
+                  const identifier = quality ? quality.id : id;
 
-                return (
-                  <QualityProfileItemDragSource
-                    key={identifier}
-                    editGroups={editGroups}
-                    groupId={id}
-                    qualityId={quality && quality.id}
-                    name={quality ? quality.name : name}
-                    allowed={allowed}
-                    items={items}
-                    sortIndex={index}
-                    isInGroup={false}
-                    isDragging={isDragging}
-                    isDraggingUp={isDraggingUp}
-                    isDraggingDown={isDraggingDown}
-                    {...otherProps}
-                  />
-                );
-              }).reverse()
-            }
+                  return (
+                    <QualityProfileItemDragSource
+                      key={identifier}
+                      editGroups={editGroups}
+                      groupId={id}
+                      qualityId={quality && quality.id}
+                      name={quality ? quality.name : name}
+                      allowed={allowed}
+                      items={items}
+                      sortIndex={index}
+                      isInGroup={false}
+                      isDragging={isDragging}
+                      isDraggingUp={isDraggingUp}
+                      isDraggingDown={isDraggingDown}
+                      {...otherProps}
+                    />
+                  );
+                }).reverse()
+              }
 
-            <QualityProfileItemDragPreview />
-          </div>
+              <QualityProfileItemDragPreview />
+            </div>
+          </Measure>
         </div>
       </FormGroup>
     );

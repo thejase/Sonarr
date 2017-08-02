@@ -66,7 +66,8 @@ class QualityProfileItem extends Component {
           {
             !editGroups &&
               <CheckInput
-                containerClassName={styles.checkContainer}
+                className={styles.checkInput}
+                containerClassName={styles.checkInputContainer}
                 name={name}
                 value={allowed}
                 isDisabled={!!groupId}

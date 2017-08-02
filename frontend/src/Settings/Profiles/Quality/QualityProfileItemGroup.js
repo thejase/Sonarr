@@ -82,7 +82,8 @@ class QualityProfileItemGroup extends Component {
                   onPress={this.onDeleteGroupPress}
                 /> :
                 <CheckInput
-                  containerClassName={styles.checkContainer}
+                  className={styles.checkInput}
+                  containerClassName={styles.checkInputContainer}
                   name="allowed"
                   value={allowed}
                   onChange={this.onAllowedChange}

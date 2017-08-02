@@ -7,11 +7,17 @@
   background: #fafafa;
 }
 
-.checkContainer {
+.checkInputContainer {
   position: relative;
   margin-right: 4px;
-  margin-bottom: 7px;
+  margin-bottom: 5px;
   margin-left: 8px;
+}
+
+.checkInput {
+  composes: input from 'Components/Form/CheckInput.css';
+
+  margin-top: 5px;
 }
 
 .qualityNameContainer {
@@ -20,7 +26,7 @@
   margin-bottom: 0;
   margin-left: 2px;
   font-weight: normal;
-  line-height: 36px;
+  line-height: $qualityProfileItemHeight;
   cursor: pointer;
 }
 
