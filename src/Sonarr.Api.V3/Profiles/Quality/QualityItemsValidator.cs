@@ -176,7 +176,7 @@ namespace Sonarr.Api.V3.Profiles.Quality
                             return false;
                         }
 
-                        qualityIds.Add(quality.Id);
+                        qualityIds.Add(quality.Quality.Id);
                     }
                 }
 
