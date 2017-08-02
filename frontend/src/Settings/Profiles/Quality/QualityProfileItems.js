@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { icons } from 'Helpers/Props';
+import IconButton from 'Components/Link/IconButton';
 import FormGroup from 'Components/Form/FormGroup';
 import FormLabel from 'Components/Form/FormLabel';
 import FormInputHelpText from 'Components/Form/FormInputHelpText';
@@ -14,11 +16,13 @@ class QualityProfileItems extends Component {
 
   render() {
     const {
+      editGroups,
       dragIndex,
       dropIndex,
       qualityProfileItems,
       errors,
       warnings,
+      onToggleEditGroupsMode,
       ...otherProps
     } = this.props;
 
@@ -28,7 +32,16 @@ class QualityProfileItems extends Component {
 
     return (
       <FormGroup>
-        <FormLabel>Qualities</FormLabel>
+        <FormLabel>
+          Qualities
+
+          <IconButton
+            className={styles.editGroupsButton}
+            name={editGroups ? icons.REORDER : icons.GROUP}
+            title={editGroups ? 'Reorder' : 'Edit Groups'}
+            onPress={onToggleEditGroupsMode}
+          />
+        </FormLabel>
 
         <div>
           <FormInputHelpText
@@ -69,6 +82,7 @@ class QualityProfileItems extends Component {
                 return (
                   <QualityProfileItemDragSource
                     key={identifier}
+                    editGroups={editGroups}
                     groupId={id}
                     qualityId={quality && quality.id}
                     name={quality ? quality.name : name}
@@ -94,11 +108,13 @@ class QualityProfileItems extends Component {
 }
 
 QualityProfileItems.propTypes = {
+  editGroups: PropTypes.bool.isRequired,
   dragIndex: PropTypes.number,
   dropIndex: PropTypes.number,
   qualityProfileItems: PropTypes.arrayOf(PropTypes.object).isRequired,
   errors: PropTypes.arrayOf(PropTypes.object),
-  warnings: PropTypes.arrayOf(PropTypes.object)
+  warnings: PropTypes.arrayOf(PropTypes.object),
+  onToggleEditGroupsMode: PropTypes.func.isRequired
 };
 
 QualityProfileItems.defaultProps = {

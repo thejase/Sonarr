@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 import { icons } from 'Helpers/Props';
 import Icon from 'Components/Icon';
+import Label from 'Components/Label';
 import IconButton from 'Components/Link/IconButton';
 import CheckInput from 'Components/Form/CheckInput';
 import TextInput from 'Components/Form/TextInput';
@@ -45,7 +46,7 @@ class QualityProfileItemGroup extends Component {
 
   render() {
     const {
-      advancedSettings,
+      editGroups,
       groupId,
       name,
       allowed,
@@ -64,6 +65,7 @@ class QualityProfileItemGroup extends Component {
       <div
         className={classNames(
           styles.qualityProfileItemGroup,
+          editGroups && styles.editGroups,
           isDragging && styles.isDragging,
         )}
       >
@@ -71,33 +73,47 @@ class QualityProfileItemGroup extends Component {
           <label
             className={styles.qualityName}
           >
-            <CheckInput
-              containerClassName={styles.checkContainer}
-              name="allowed"
-              value={allowed}
-              onChange={this.onAllowedChange}
-            />
+            {
+              editGroups ?
+                <IconButton
+                  className={styles.deleteGroupButton}
+                  name={icons.UNGROUP}
+                  title="Ungroup"
+                  onPress={this.onDeleteGroupPress}
+                /> :
+                <CheckInput
+                  containerClassName={styles.checkContainer}
+                  name="allowed"
+                  value={allowed}
+                  onChange={this.onAllowedChange}
+                />
+            }
 
             {
-              advancedSettings ?
+              editGroups ?
                 <TextInput
-                  className={styles.name}
+                  className={styles.nameInput}
                   name="name"
                   value={name}
                   onChange={this.onNameChange}
                 /> :
-              name
+                <div className={styles.nameContainer}>
+                  {name}
+
+                  <div className={styles.groupQualities}>
+                    {
+                      items.map(({ quality }) => {
+                        return (
+                          <Label key={quality.id}>
+                            {quality.name}
+                          </Label>
+                        );
+                      })
+                    }
+                  </div>
+                </div>
             }
           </label>
-
-          {
-            advancedSettings &&
-              <IconButton
-                className={styles.deleteGroupButton}
-                name={icons.REMOVE}
-                onPress={this.onDeleteGroupPress}
-              />
-          }
 
           {
             connectDragSource(
@@ -105,6 +121,7 @@ class QualityProfileItemGroup extends Component {
                 <Icon
                   className={styles.dragIcon}
                   name={icons.REORDER}
+                  title="Reorder"
                 />
               </div>
               )
@@ -112,14 +129,14 @@ class QualityProfileItemGroup extends Component {
         </div>
 
         {
-          advancedSettings &&
+          editGroups &&
             <div className={styles.items}>
               {
                 items.map(({ quality }, index) => {
                   return (
                     <QualityProfileItemDragSource
                       key={quality.id}
-                      advancedSettings={advancedSettings}
+                      editGroups={editGroups}
                       groupId={groupId}
                       qualityId={quality.id}
                       name={quality.name}
@@ -146,7 +163,7 @@ class QualityProfileItemGroup extends Component {
 }
 
 QualityProfileItemGroup.propTypes = {
-  advancedSettings: PropTypes.bool,
+  editGroups: PropTypes.bool,
   groupId: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   allowed: PropTypes.bool.isRequired,

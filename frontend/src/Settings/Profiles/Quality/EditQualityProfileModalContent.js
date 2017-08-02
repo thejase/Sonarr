@@ -17,7 +17,7 @@ import styles from './EditQualityProfileModalContent.css';
 
 function EditQualityProfileModalContent(props) {
   const {
-    advancedSettings,
+    editGroups,
     isFetching,
     error,
     isSaving,
@@ -62,39 +62,45 @@ function EditQualityProfileModalContent(props) {
             <Form
               {...otherProps}
             >
-              <FormGroup>
-                <FormLabel>Name</FormLabel>
+              <div className={styles.formGroupsContainer}>
+                <div className={styles.formGroupWrapper}>
+                  <FormGroup>
+                    <FormLabel>Name</FormLabel>
 
-                <FormInputGroup
-                  type={inputTypes.TEXT}
-                  name="name"
-                  {...name}
-                  onChange={onInputChange}
-                />
-              </FormGroup>
+                    <FormInputGroup
+                      type={inputTypes.TEXT}
+                      name="name"
+                      {...name}
+                      onChange={onInputChange}
+                    />
+                  </FormGroup>
 
-              <FormGroup>
-                <FormLabel>Cutoff</FormLabel>
+                  <FormGroup>
+                    <FormLabel>Cutoff</FormLabel>
 
-                <FormInputGroup
-                  type={inputTypes.SELECT}
-                  name="cutoff"
-                  {...cutoff}
-                  values={qualities}
-                  helpText="Once this quality is reached Sonarr will no longer download episodes"
-                  onChange={onCutoffChange}
-                />
-              </FormGroup>
+                    <FormInputGroup
+                      type={inputTypes.SELECT}
+                      name="cutoff"
+                      {...cutoff}
+                      values={qualities}
+                      helpText="Once this quality is reached Sonarr will no longer download episodes"
+                      onChange={onCutoffChange}
+                    />
+                  </FormGroup>
+                </div>
 
-              <QualityProfileItems
-                advancedSettings={advancedSettings}
-                qualityProfileItems={items.value}
-                errors={items.errors}
-                warnings={items.warnings}
-                {...otherProps}
-              />
-
+                <div className={styles.formGroupWrapper}>
+                  <QualityProfileItems
+                    editGroups={editGroups}
+                    qualityProfileItems={items.value}
+                    errors={items.errors}
+                    warnings={items.warnings}
+                    {...otherProps}
+                  />
+                </div>
+              </div>
             </Form>
+
         }
       </ModalBody>
 
@@ -134,7 +140,7 @@ function EditQualityProfileModalContent(props) {
 }
 
 EditQualityProfileModalContent.propTypes = {
-  advancedSettings: PropTypes.bool.isRequired,
+  editGroups: PropTypes.bool.isRequired,
   isFetching: PropTypes.bool.isRequired,
   error: PropTypes.object,
   isSaving: PropTypes.bool.isRequired,

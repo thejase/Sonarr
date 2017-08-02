@@ -15,6 +15,26 @@ function getQualityItemGroupId(qualityProfile) {
   return Math.max(1000, ...ids) + 1;
 }
 
+function getQualityIndex(profileItems, id) {
+  for (let i = 0; i < profileItems.length; i++) {
+    const item = profileItems[i];
+
+    if (item.id == null) {
+      for (let j = 0; j < profileItems.length; j++) {
+        const groupItem = item.items[j];
+
+        if (groupItem.id === id) {
+          return i + (j /10);
+        }
+      }
+    }
+
+    if (item.id === id) {
+      return i;
+    }
+  }
+}
+
 function createQualitiesSelector() {
   return createSelector(
     createProviderSettingsSelector(),
@@ -47,13 +67,11 @@ function createQualitiesSelector() {
 
 function createMapStateToProps() {
   return createSelector(
-    (state) => state.settings.advancedSettings,
     createProviderSettingsSelector(),
     createQualitiesSelector(),
     createProfileInUseSelector('qualityProfileId'),
-    (advancedSettings, qualityProfile, qualities, isInUse) => {
+    (qualityProfile, qualities, isInUse) => {
       return {
-        advancedSettings,
         qualities,
         ...qualityProfile,
         isInUse
@@ -80,7 +98,8 @@ class EditQualityProfileModalContentConnector extends Component {
       dragIndex: null,
       dragGroupId: null,
       dropIndex: null,
-      dropGroupId: null
+      dropGroupId: null,
+      editGroups: false
     };
   }
 
@@ -214,7 +233,19 @@ class EditQualityProfileModalContentConnector extends Component {
     this.ensureCutoff(qualityProfile);
   }
 
-  onQualityProfileItemDragMove = ({ dragIndex, dragGroupIndex, dragGroupId, dropIndex, dropGroupIndex, dropGroupId }) => {
+  onQualityProfileItemDragMove = (options) => {
+    let {
+      dragIndex,
+      dropIndex
+    } = options;
+
+    const {
+      dragGroupIndex,
+      dragGroupId,
+      dropGroupIndex,
+      dropGroupId
+    } = options;
+
     // If we're dragging between different groups we use the group indexes,
     // not the item indexes.
 
@@ -292,6 +323,10 @@ class EditQualityProfileModalContentConnector extends Component {
     });
   }
 
+  onToggleEditGroupsMode = () => {
+    this.setState({ editGroups: !this.state.editGroups });
+  }
+
   //
   // Control
 
@@ -341,6 +376,7 @@ class EditQualityProfileModalContentConnector extends Component {
         onItemGroupNameChange={this.onItemGroupNameChange}
         onQualityProfileItemDragMove={this.onQualityProfileItemDragMove}
         onQualityProfileItemDragEnd={this.onQualityProfileItemDragEnd}
+        onToggleEditGroupsMode={this.onToggleEditGroupsMode}
       />
     );
   }

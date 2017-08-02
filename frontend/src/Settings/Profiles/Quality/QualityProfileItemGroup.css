@@ -3,6 +3,11 @@
   border: 1px solid #aaa;
   border-radius: 4px;
   background: #fafafa;
+
+  &.editGroups {
+    border-style: dashed;
+    background: #fcfcfc;
+  }
 }
 
 .qualityProfileItemGroupInfo {
@@ -18,11 +23,24 @@
   margin-left: 8px;
 }
 
-.name {
+.nameInput {
   composes: text from 'Components/Form/TextInput.css';
 
   margin-top: 4px;
   margin-right: 10px;
+}
+
+.nameContainer {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.groupQualities {
+  display: flex;
+  justify-content: flex-end;
+  flex-grow: 1;
+  margin-left: 10px;
 }
 
 .qualityName {
@@ -41,6 +59,8 @@
   display: flex;
   justify-content: center;
   flex-shrink: 0;
+  margin-right: 5px;
+  margin-left: 8px;
   width: 20px;
 }
 
@@ -64,5 +84,5 @@
 }
 
 .items {
-  margin: 4px 4px 4px 39px;
+  margin: 4px 4px 4px 35px;
 }

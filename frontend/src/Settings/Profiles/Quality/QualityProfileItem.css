@@ -14,7 +14,7 @@
   margin-left: 8px;
 }
 
-.qualityName {
+.qualityNameContainer {
   display: flex;
   flex-grow: 1;
   margin-bottom: 0;
@@ -24,12 +24,18 @@
   cursor: pointer;
 }
 
+.qualityName {
+  margin-left: 14px;
+}
+
 .createGroupButton {
   composes: buton from 'Components/Link/IconButton.css';
 
   display: flex;
   justify-content: center;
   flex-shrink: 0;
+  margin-right: 5px;
+  margin-left: 8px;
   width: 20px;
 }
 

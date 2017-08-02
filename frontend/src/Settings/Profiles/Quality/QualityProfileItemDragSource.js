@@ -92,7 +92,7 @@ class QualityProfileItemDragSource extends Component {
 
   render() {
     const {
-      advancedSettings,
+      editGroups,
       groupId,
       qualityId,
       name,
@@ -138,7 +138,7 @@ class QualityProfileItemDragSource extends Component {
         {
           !!groupId && qualityId == null &&
             <QualityProfileItemGroup
-              advancedSettings={advancedSettings}
+              editGroups={editGroups}
               groupId={groupId}
               name={name}
               allowed={allowed}
@@ -160,7 +160,7 @@ class QualityProfileItemDragSource extends Component {
         {
           qualityId != null &&
             <QualityProfileItem
-              advancedSettings={advancedSettings}
+              editGroups={editGroups}
               groupId={groupId}
               qualityId={qualityId}
               name={name}
@@ -188,7 +188,7 @@ class QualityProfileItemDragSource extends Component {
 }
 
 QualityProfileItemDragSource.propTypes = {
-  advancedSettings: PropTypes.bool.isRequired,
+  editGroups: PropTypes.bool.isRequired,
   groupId: PropTypes.number,
   qualityId: PropTypes.number,
   name: PropTypes.string.isRequired,

@@ -35,7 +35,7 @@ class QualityProfileItem extends Component {
 
   render() {
     const {
-      advancedSettings,
+      editGroups,
       groupId,
       name,
       allowed,
@@ -51,27 +51,33 @@ class QualityProfileItem extends Component {
         )}
       >
         <label
-          className={styles.qualityName}
+          className={styles.qualityNameContainer}
         >
-          <CheckInput
-            containerClassName={styles.checkContainer}
-            name={name}
-            value={allowed}
-            isDisabled={!!groupId}
-            onChange={this.onAllowedChange}
-          />
+          {
+            editGroups && !groupId &&
+              <IconButton
+                className={styles.createGroupButton}
+                name={icons.GROUP}
+                title="Group"
+                onPress={this.onCreateGroupPress}
+              />
+          }
 
-          {name}
+          {
+            !editGroups &&
+              <CheckInput
+                containerClassName={styles.checkContainer}
+                name={name}
+                value={allowed}
+                isDisabled={!!groupId}
+                onChange={this.onAllowedChange}
+              />
+          }
+
+          <div className={!!groupId && styles.qualityName}>
+            {name}
+          </div>
         </label>
-
-        {
-          advancedSettings && !groupId &&
-            <IconButton
-              className={styles.createGroupButton}
-              name={icons.ADD}
-              onPress={this.onCreateGroupPress}
-            />
-        }
 
         {
           connectDragSource(
@@ -90,7 +96,7 @@ class QualityProfileItem extends Component {
 }
 
 QualityProfileItem.propTypes = {
-  advancedSettings: PropTypes.bool,
+  editGroups: PropTypes.bool,
   groupId: PropTypes.number,
   qualityId: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
