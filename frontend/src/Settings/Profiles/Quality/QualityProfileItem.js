@@ -36,10 +36,12 @@ class QualityProfileItem extends Component {
   render() {
     const {
       editGroups,
+      isPreview,
       groupId,
       name,
       allowed,
       isDragging,
+      isOverCurrent,
       connectDragSource
     } = this.props;
 
@@ -48,13 +50,15 @@ class QualityProfileItem extends Component {
         className={classNames(
           styles.qualityProfileItem,
           isDragging && styles.isDragging,
+          isPreview && styles.isPreview,
+          isOverCurrent && styles.isOverCurrent
         )}
       >
         <label
           className={styles.qualityNameContainer}
         >
           {
-            editGroups && !groupId &&
+            editGroups && !groupId && !isPreview &&
               <IconButton
                 className={styles.createGroupButton}
                 name={icons.GROUP}
@@ -75,7 +79,10 @@ class QualityProfileItem extends Component {
               />
           }
 
-          <div className={!!groupId && styles.qualityName}>
+          <div className={classNames(
+            styles.qualityName,
+            !!groupId && styles.inGroup
+          )}>
             {name}
           </div>
         </label>
@@ -98,12 +105,14 @@ class QualityProfileItem extends Component {
 
 QualityProfileItem.propTypes = {
   editGroups: PropTypes.bool,
+  isPreview: PropTypes.bool,
   groupId: PropTypes.number,
   qualityId: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   allowed: PropTypes.bool.isRequired,
   sortIndex: PropTypes.number.isRequired,
   isDragging: PropTypes.bool.isRequired,
+  isOverCurrent: PropTypes.bool.isRequired,
   isInGroup: PropTypes.bool,
   connectDragSource: PropTypes.func,
   onCreateGroupPress: PropTypes.func,
@@ -111,6 +120,7 @@ QualityProfileItem.propTypes = {
 };
 
 QualityProfileItem.defaultProps = {
+  isPreview: false,
   // The drag preview will not connect the drag handle.
   connectDragSource: (node) => node
 };

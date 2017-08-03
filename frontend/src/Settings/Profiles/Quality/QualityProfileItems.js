@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Measure from 'react-measure';
-import { icons } from 'Helpers/Props';
+import { icons, kinds, sizes } from 'Helpers/Props';
 import dimensions from 'Styles/Variables/dimensions';
-import IconButton from 'Components/Link/IconButton';
+import Icon from 'Components/Icon';
+import Button from 'Components/Link/Button';
 import FormGroup from 'Components/Form/FormGroup';
 import FormLabel from 'Components/Form/FormLabel';
 import FormInputHelpText from 'Components/Form/FormInputHelpText';
@@ -88,16 +89,9 @@ class QualityProfileItems extends Component {
     const isDraggingDown = isDragging && dropIndex <= dragIndex;
 
     return (
-      <FormGroup>
-        <FormLabel>
+      <FormGroup size={sizes.EXTRA_SMALL}>
+        <FormLabel size={sizes.SMALL}>
           Qualities
-
-          <IconButton
-            className={styles.editGroupsButton}
-            name={editGroups ? icons.REORDER : icons.GROUP}
-            title={editGroups ? 'Reorder' : 'Edit Groups'}
-            onPress={this.onToggleEditGroupsMode}
-          />
         </FormLabel>
 
         <div>
@@ -131,6 +125,22 @@ class QualityProfileItems extends Component {
             })
           }
 
+          <Button
+            className={styles.editGroupsButton}
+            kind={kinds.PRIMARY}
+            onPress={this.onToggleEditGroupsMode}
+          >
+            <div>
+              <Icon
+                className={styles.editGroupsButtonIcon}
+                name={editGroups ? icons.REORDER : icons.GROUP}
+              />
+
+              {
+                editGroups ? 'Done Editing Groups' : 'Edit Groups'
+              }
+            </div>
+          </Button>
           <Measure
             whitelist={['height']}
             includeMargin={false}

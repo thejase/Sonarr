@@ -1,8 +1,11 @@
 .editGroupsButton {
-  composes: button from 'Components/Link/IconButton.css';
+  composes: button from 'Components/Link/Button.css';
 
-  margin-left: 8px;
-  height: 35px;
+  margin-top: 10px;
+}
+
+.editGroupsButtonIcon {
+  margin-right: 8px;
 }
 
 .qualities {

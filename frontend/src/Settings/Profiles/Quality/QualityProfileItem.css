@@ -31,7 +31,9 @@
 }
 
 .qualityName {
-  margin-left: 14px;
+  &.inGroup {
+    margin-left: 14px;
+  }
 }
 
 .createGroupButton {
@@ -62,4 +64,14 @@
 
 .isDragging {
   opacity: 0.25;
+}
+
+.isPreview {
+  .qualityName {
+    margin-left: 14px;
+
+    &.inGroup {
+      margin-left: 28px;
+    }
+  }
 }

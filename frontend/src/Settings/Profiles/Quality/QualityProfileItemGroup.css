@@ -18,6 +18,9 @@
 
 .checkInputContainer {
   composes: checkInputContainer from './QualityProfileItem.css';
+
+  display: flex;
+  align-items: center;
 }
 
 .checkInput {
@@ -37,20 +40,30 @@
   flex-grow: 1;
 }
 
+.name {
+  flex-shrink: 0;
+}
+
 .groupQualities {
   display: flex;
   justify-content: flex-end;
   flex-grow: 1;
-  margin-left: 10px;
+  flex-wrap: wrap;
+  margin: 2px 0 2px 10px;
 }
 
-.qualityName {
+.qualityNameContainer {
   display: flex;
+  align-items: stretch;
   flex-grow: 1;
   margin-bottom: 0;
   margin-left: 2px;
   font-weight: normal;
-  line-height: $qualityProfileItemHeight;
+}
+
+.qualityNameLabel {
+  composes: qualityNameContainer;
+
   cursor: pointer;
 }
 
@@ -85,5 +98,5 @@
 }
 
 .items {
-  margin: 4px 4px 4px 35px;
+  margin: 0 50px 0 4px;
 }

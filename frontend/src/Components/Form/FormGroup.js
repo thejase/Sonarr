@@ -41,7 +41,7 @@ function FormGroup(props) {
 FormGroup.propTypes = {
   className: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
-  size: PropTypes.string.isRequired,
+  size: PropTypes.oneOf(sizes.ALL).isRequired,
   advancedSettings: PropTypes.bool.isRequired,
   isAdvanced: PropTypes.bool.isRequired
 };

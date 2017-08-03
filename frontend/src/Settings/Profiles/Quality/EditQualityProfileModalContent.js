@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { inputTypes, kinds } from 'Helpers/Props';
+import { inputTypes, kinds, sizes } from 'Helpers/Props';
 import Button from 'Components/Link/Button';
 import SpinnerErrorButton from 'Components/Link/SpinnerErrorButton';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
@@ -64,8 +64,10 @@ function EditQualityProfileModalContent(props) {
             >
               <div className={styles.formGroupsContainer}>
                 <div className={styles.formGroupWrapper}>
-                  <FormGroup>
-                    <FormLabel>Name</FormLabel>
+                  <FormGroup size={sizes.EXTRA_SMALL}>
+                    <FormLabel size={sizes.small}>
+                      Name
+                    </FormLabel>
 
                     <FormInputGroup
                       type={inputTypes.TEXT}
@@ -75,8 +77,10 @@ function EditQualityProfileModalContent(props) {
                     />
                   </FormGroup>
 
-                  <FormGroup>
-                    <FormLabel>Cutoff</FormLabel>
+                  <FormGroup size={sizes.EXTRA_SMALL}>
+                    <FormLabel size={sizes.small}>
+                      Cutoff
+                    </FormLabel>
 
                     <FormInputGroup
                       type={inputTypes.SELECT}

@@ -1,11 +1,10 @@
 .formGroupsContainer {
   display: flex;
-  justify-content: center;
   flex-wrap: wrap;
 }
 
 .formGroupWrapper {
-  flex: 0 0 $formGroupSmallWidth;
+  flex: 0 0 calc($formGroupSmallWidth - 100px);
 }
 
 .deleteButtonContainer {

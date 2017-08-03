@@ -9,8 +9,19 @@ import QualityProfileItemGroup from './QualityProfileItemGroup';
 import styles from './QualityProfileItemDragSource.css';
 
 const qualityProfileItemDragSource = {
-  beginDrag({ groupId, qualityId, sortIndex, groupIndex, name, allowed }) {
+  beginDrag(props) {
+    const {
+      editGroups,
+      groupId,
+      qualityId,
+      sortIndex,
+      groupIndex,
+      name,
+      allowed
+    } = props;
+
     return {
+      editGroups,
       groupId,
       qualityId,
       sortIndex,
@@ -167,6 +178,7 @@ class QualityProfileItemDragSource extends Component {
               allowed={allowed}
               sortIndex={sortIndex}
               isDragging={isDragging}
+              isOverCurrent={isOverCurrent}
               connectDragSource={connectDragSource}
               onCreateGroupPress={onCreateGroupPress}
               onQualityProfileItemAllowedChange={onQualityProfileItemAllowedChange}

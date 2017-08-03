@@ -1,3 +1,4 @@
+export const EXTRA_SMALL = 'extraSmall';
 export const SMALL = 'small';
 export const MEDIUM = 'medium';
 export const LARGE = 'large';

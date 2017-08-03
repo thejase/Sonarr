@@ -21,10 +21,12 @@ module.exports = {
   breakpointExtraLarge: '1450px',
 
   // Form
+  formGroupExtraSmallWidth: '550px',
   formGroupSmallWidth: '650px',
   formGroupMediumWidth: '800px',
   formGroupLargeWidth: '1200px',
-  formLabelWidth: '250px',
+  formLabelSmallWidth: '150px',
+  formLabelLargeWidth: '250px',
   formLabelRightMarginWidth: '20px',
 
   // Drag

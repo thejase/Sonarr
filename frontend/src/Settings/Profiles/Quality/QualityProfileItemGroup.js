@@ -70,17 +70,30 @@ class QualityProfileItemGroup extends Component {
         )}
       >
         <div className={styles.qualityProfileItemGroupInfo}>
-          <label
-            className={styles.qualityName}
-          >
-            {
-              editGroups ?
+          {
+            editGroups &&
+              <div className={styles.qualityNameContainer}>
                 <IconButton
                   className={styles.deleteGroupButton}
                   name={icons.UNGROUP}
                   title="Ungroup"
                   onPress={this.onDeleteGroupPress}
-                /> :
+                />
+
+                <TextInput
+                  className={styles.nameInput}
+                  name="name"
+                  value={name}
+                  onChange={this.onNameChange}
+                />
+              </div>
+          }
+
+          {
+            !editGroups &&
+              <label
+                className={styles.qualityNameLabel}
+              >
                 <CheckInput
                   className={styles.checkInput}
                   containerClassName={styles.checkInputContainer}
@@ -88,18 +101,9 @@ class QualityProfileItemGroup extends Component {
                   value={allowed}
                   onChange={this.onAllowedChange}
                 />
-            }
 
-            {
-              editGroups ?
-                <TextInput
-                  className={styles.nameInput}
-                  name="name"
-                  value={name}
-                  onChange={this.onNameChange}
-                /> :
                 <div className={styles.nameContainer}>
-                  {name}
+                  <div className={styles.name}>{name}</div>
 
                   <div className={styles.groupQualities}>
                     {
@@ -113,8 +117,8 @@ class QualityProfileItemGroup extends Component {
                     }
                   </div>
                 </div>
-            }
-          </label>
+              </label>
+          }
 
           {
             connectDragSource(
