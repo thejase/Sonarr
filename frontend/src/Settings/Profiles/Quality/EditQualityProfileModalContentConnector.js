@@ -15,26 +15,6 @@ function getQualityItemGroupId(qualityProfile) {
   return Math.max(1000, ...ids) + 1;
 }
 
-function getQualityIndex(profileItems, id) {
-  for (let i = 0; i < profileItems.length; i++) {
-    const item = profileItems[i];
-
-    if (item.id == null) {
-      for (let j = 0; j < profileItems.length; j++) {
-        const groupItem = item.items[j];
-
-        if (groupItem.id === id) {
-          return i + (j /10);
-        }
-      }
-    }
-
-    if (item.id === id) {
-      return i;
-    }
-  }
-}
-
 function parseIndex(index) {
   const split = index.split('.');
 
@@ -114,7 +94,7 @@ class EditQualityProfileModalContentConnector extends Component {
       dragQualityIndex: null,
       dropQualityIndex: null,
       dropPosition: null,
-      editGroups: true
+      editGroups: false
     };
   }
 

@@ -70,7 +70,6 @@ class QualityProfileItems extends Component {
   render() {
     const {
       editGroups,
-      dragQualityIndex,
       dropQualityIndex,
       dropPosition,
       qualityProfileItems,
