@@ -34,7 +34,7 @@ FormLabel.propTypes = {
   children: PropTypes.node.isRequired,
   className: PropTypes.string,
   errorClassName: PropTypes.string,
-  size: PropTypes.oneOf(sizes.ALL),
+  size: PropTypes.oneOf(sizes.all),
   name: PropTypes.string,
   hasError: PropTypes.bool,
   isAdvanced: PropTypes.bool.isRequired

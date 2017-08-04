@@ -152,7 +152,7 @@ class Modal extends Component {
 Modal.propTypes = {
   className: PropTypes.string,
   backdropClassName: PropTypes.string,
-  size: PropTypes.oneOf(sizes.ALL),
+  size: PropTypes.oneOf(sizes.all),
   children: PropTypes.node,
   isOpen: PropTypes.bool.isRequired,
   onModalClose: PropTypes.func.isRequired

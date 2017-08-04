@@ -39,7 +39,6 @@ class QualityProfiles extends Component {
 
   render() {
     const {
-      advancedSettings,
       items,
       isDeleting,
       onConfirmDeleteQualityProfile,
@@ -60,7 +59,6 @@ class QualityProfiles extends Component {
                 return (
                   <QualityProfile
                     key={item.id}
-                    advancedSettings={advancedSettings}
                     {...item}
                     isDeleting={isDeleting}
                     onConfirmDeleteQualityProfile={onConfirmDeleteQualityProfile}
@@ -93,7 +91,6 @@ class QualityProfiles extends Component {
 }
 
 QualityProfiles.propTypes = {
-  advancedSettings: PropTypes.bool.isRequired,
   isFetching: PropTypes.bool.isRequired,
   error: PropTypes.object,
   isDeleting: PropTypes.bool.isRequired,

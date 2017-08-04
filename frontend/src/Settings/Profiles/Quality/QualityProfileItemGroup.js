@@ -103,7 +103,12 @@ class QualityProfileItemGroup extends Component {
                 />
 
                 <div className={styles.nameContainer}>
-                  <div className={styles.name}>{name}</div>
+                  <div className={classNames(
+                    styles.name,
+                    !allowed && styles.notAllowed
+                  )}>
+                    {name}
+                  </div>
 
                   <div className={styles.groupQualities}>
                     {
@@ -113,7 +118,7 @@ class QualityProfileItemGroup extends Component {
                             {quality.name}
                           </Label>
                         );
-                      })
+                      }).reverse()
                     }
                   </div>
                 </div>

@@ -51,7 +51,8 @@ class QualityProfileItem extends Component {
           styles.qualityProfileItem,
           isDragging && styles.isDragging,
           isPreview && styles.isPreview,
-          isOverCurrent && styles.isOverCurrent
+          isOverCurrent && styles.isOverCurrent,
+          groupId && styles.isInGroup
         )}
       >
         <label
@@ -81,7 +82,8 @@ class QualityProfileItem extends Component {
 
           <div className={classNames(
             styles.qualityName,
-            !!groupId && styles.inGroup
+            groupId && styles.isInGroup,
+            !allowed && styles.notAllowed
           )}>
             {name}
           </div>

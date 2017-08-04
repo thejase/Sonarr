@@ -5,7 +5,6 @@
   background: #fafafa;
 
   &.editGroups {
-    border-style: dashed;
     background: #fcfcfc;
   }
 }
@@ -42,6 +41,10 @@
 
 .name {
   flex-shrink: 0;
+
+  &.notAllowed {
+    color: #c6c6c6;
+  }
 }
 
 .groupQualities {
@@ -98,5 +101,5 @@
 }
 
 .items {
-  margin: 0 50px 0 4px;
+  margin: 0 50px 0 35px;
 }

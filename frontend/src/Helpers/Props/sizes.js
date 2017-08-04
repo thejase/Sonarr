@@ -4,4 +4,4 @@ export const MEDIUM = 'medium';
 export const LARGE = 'large';
 export const EXTRA_LARGE = 'extraLarge';
 
-export const all = [SMALL, MEDIUM, LARGE, EXTRA_LARGE];
+export const all = [EXTRA_SMALL, SMALL, MEDIUM, LARGE, EXTRA_LARGE];

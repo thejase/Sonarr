@@ -5,6 +5,10 @@
   border: 1px solid #aaa;
   border-radius: 4px;
   background: #fafafa;
+
+  &.isInGroup {
+    border-style: dashed;
+  }
 }
 
 .checkInputContainer {
@@ -31,8 +35,12 @@
 }
 
 .qualityName {
-  &.inGroup {
+  &.isInGroup {
     margin-left: 14px;
+  }
+
+  &.notAllowed {
+    color: #c6c6c6;
   }
 }
 
@@ -70,7 +78,7 @@
   .qualityName {
     margin-left: 14px;
 
-    &.inGroup {
+    &.isInGroup {
       margin-left: 28px;
     }
   }
