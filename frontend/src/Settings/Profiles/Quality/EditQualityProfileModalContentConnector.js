@@ -35,6 +35,22 @@ function getQualityIndex(profileItems, id) {
   }
 }
 
+function parseIndex(index) {
+  const split = index.split('.');
+
+  if (split.length === 1) {
+    return [
+      null,
+      parseInt(split[0]) - 1
+    ];
+  }
+
+  return [
+    parseInt(split[0]) - 1,
+    parseInt(split[1]) - 1
+  ];
+}
+
 function createQualitiesSelector() {
   return createSelector(
     createProviderSettingsSelector(),
@@ -95,11 +111,10 @@ class EditQualityProfileModalContentConnector extends Component {
     super(props, context);
 
     this.state = {
-      dragIndex: null,
-      dragGroupId: null,
-      dropIndex: null,
-      dropGroupId: null,
-      editGroups: false
+      dragQualityIndex: null,
+      dropQualityIndex: null,
+      dropPosition: null,
+      editGroups: true
     };
   }
 
@@ -234,77 +249,127 @@ class EditQualityProfileModalContentConnector extends Component {
   }
 
   onQualityProfileItemDragMove = (options) => {
-    let {
-      dragIndex,
-      dropIndex
-    } = options;
-
     const {
-      dragGroupIndex,
-      dragGroupId,
-      dropGroupIndex,
-      dropGroupId
+      dragQualityIndex,
+      dropQualityIndex,
+      dropPosition
     } = options;
 
-    // If we're dragging between different groups we use the group indexes,
-    // not the item indexes.
+    const [dragGroupIndex, dragItemIndex] = parseIndex(dragQualityIndex);
+    const [dropGroupIndex, dropItemIndex] = parseIndex(dropQualityIndex);
 
-    // Can't drag from a group to a position in the main list with the same index.
-    // Not relying on indexes and calculating location based on group/quality IDs would help with this I think.
+    if (
+      (dropPosition === 'below' && dropItemIndex - 1 === dragItemIndex) ||
+      (dropPosition === 'above' && dropItemIndex + 1 === dragItemIndex)
+    ) {
+      if (
+        this.state.dragQualityIndex != null &&
+        this.state.dropQualityIndex != null &&
+        this.state.dropPosition != null
+      ) {
+        this.setState({
+          dragQualityIndex: null,
+          dropQualityIndex: null,
+          dropPosition: null
+        });
+      }
 
-    if (dragGroupIndex != null && dropGroupIndex != null && dragGroupIndex !== dropGroupIndex) {
-      dragIndex = dragGroupIndex;
-      dropIndex = dropGroupIndex;
+      return;
+    }
+
+    let adjustedDropQualityIndex = dropQualityIndex;
+
+    // Correct dragging out of a group to the position above
+    if (
+      dropPosition === 'above' &&
+      dragGroupIndex !== dropGroupIndex &&
+      dropGroupIndex != null
+    ) {
+      // Add 1 to the group index and 2 to the item index so it's inserted above in the correct group
+      adjustedDropQualityIndex = `${dropGroupIndex + 1}.${dropItemIndex + 2}`;
+    }
+
+    // Correct inserting above outside a group
+    if (
+      dropPosition === 'above' &&
+      dragGroupIndex !== dropGroupIndex &&
+      dropGroupIndex == null
+    ) {
+      // Add 2 to the item index so it's entered in the correct place
+      adjustedDropQualityIndex = `${dropItemIndex + 2}`;
+    }
+
+    // Correct inserting below a quality within the same group (when moving a lower item)
+    if (
+      dropPosition === 'below' &&
+      dragGroupIndex === dropGroupIndex &&
+      dropGroupIndex != null &&
+      dragItemIndex < dropItemIndex
+    ) {
+      // Add 1 to the group index leave the item index
+      adjustedDropQualityIndex = `${dropGroupIndex + 1}.${dropItemIndex}`;
+    }
+
+    // Correct inserting below a quality outside a group (when moving a lower item)
+    if (
+      dropPosition === 'below' &&
+      dragGroupIndex === dropGroupIndex &&
+      dropGroupIndex == null &&
+      dragItemIndex < dropItemIndex
+    ) {
+      // Leave the item index so it's inserted below the item
+      adjustedDropQualityIndex = `${dropItemIndex}`;
     }
 
     if (
-      this.state.dragIndex !== dragIndex ||
-      this.state.dragGroupId !== dragGroupId ||
-      this.state.dropIndex !== dropIndex ||
-      this.state.dropGroupId !== dropGroupId
+      dragQualityIndex !== this.state.dragQualityIndex ||
+      dropQualityIndex !== this.state.dropQualityIndex ||
+      dropPosition !== this.state.dropPosition
     ) {
       this.setState({
-        dragIndex,
-        dragGroupId,
-        dropIndex,
-        dropGroupId
+        dragQualityIndex,
+        dropQualityIndex: adjustedDropQualityIndex,
+        dropPosition
       });
     }
   }
 
-  onQualityProfileItemDragEnd = ({ groupId, qualityId, sortIndex }, didDrop) => {
+  onQualityProfileItemDragEnd = (didDrop) => {
     const {
-      dropIndex,
-      dropGroupId
+      dragQualityIndex,
+      dropQualityIndex
     } = this.state;
 
-    if (didDrop && dropIndex != null) {
+    if (didDrop && dropQualityIndex != null) {
       const qualityProfile = _.cloneDeep(this.props.item);
       const items = qualityProfile.items.value;
+      const [dragGroupIndex, dragItemIndex] = parseIndex(dragQualityIndex);
+      const [dropGroupIndex, dropItemIndex] = parseIndex(dropQualityIndex);
+
       let item = null;
-      let adjustedDropIndex = dropIndex;
+      let dropGroup = null;
 
-      if (groupId && qualityId != null) {
-        const group = _.find(items, (i) => i.id === groupId);
-        item = group.items.splice(sortIndex, 1)[0];
-
-        if (!dropGroupId && dropIndex > 0) {
-          adjustedDropIndex = dropIndex + 1;
-        }
-
-        if (!group.items.length) {
-          const index = items.indexOf(group);
-          items.splice(index, 1);
-        }
-      } else {
-        item = items.splice(sortIndex, 1)[0];
+      // Get the group before moving anything so we know the correct place to drop it.
+      if (dropGroupIndex != null) {
+        dropGroup = items[dropGroupIndex];
       }
 
-      if (dropGroupId) {
-        const group = _.find(items, (i) => i.id === dropGroupId);
-        group.items.splice(dropIndex, 0, item);
+      if (dragGroupIndex == null) {
+        item = items.splice(dragItemIndex, 1)[0];
       } else {
-        items.splice(adjustedDropIndex, 0, item);
+        const group = items[dragGroupIndex];
+        item = group.items.splice(dragItemIndex, 1)[0];
+
+        // If the group is now empty, destroy it.
+        if (!group.items.length) {
+          items.splice(dragGroupIndex, 1);
+        }
+      }
+
+      if (dropGroupIndex == null) {
+        items.splice(dropItemIndex, 0, item);
+      } else {
+        dropGroup.items.splice(dropItemIndex, 0, item);
       }
 
       this.props.setQualityProfileValue({
@@ -316,10 +381,9 @@ class EditQualityProfileModalContentConnector extends Component {
     }
 
     this.setState({
-      dragIndex: null,
-      dragGroupId: null,
-      dropIndex: null,
-      dropGroupId: null
+      dragQualityIndex: null,
+      dropQualityIndex: null,
+      dropPosition: null
     });
   }
 

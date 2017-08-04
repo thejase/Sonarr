@@ -70,8 +70,9 @@ class QualityProfileItems extends Component {
   render() {
     const {
       editGroups,
-      dragIndex,
-      dropIndex,
+      dragQualityIndex,
+      dropQualityIndex,
+      dropPosition,
       qualityProfileItems,
       errors,
       warnings,
@@ -84,9 +85,9 @@ class QualityProfileItems extends Component {
     } = this.state;
 
     const qualitiesMinHeight = editGroups ? qualitiesHeightEditGroups : qualitiesHeight;
-    const isDragging = dropIndex !== null;
-    const isDraggingUp = isDragging && dropIndex > dragIndex;
-    const isDraggingDown = isDragging && dropIndex <= dragIndex;
+    const isDragging = dropQualityIndex !== null;
+    const isDraggingUp = isDragging && dropPosition === 'above';
+    const isDraggingDown = isDragging && dropPosition === 'below';
 
     return (
       <FormGroup size={sizes.EXTRA_SMALL}>
@@ -164,6 +165,7 @@ class QualityProfileItems extends Component {
                       allowed={allowed}
                       items={items}
                       sortIndex={index}
+                      qualityIndex={`${index + 1}`}
                       isInGroup={false}
                       isDragging={isDragging}
                       isDraggingUp={isDraggingUp}
@@ -185,8 +187,9 @@ class QualityProfileItems extends Component {
 
 QualityProfileItems.propTypes = {
   editGroups: PropTypes.bool.isRequired,
-  dragIndex: PropTypes.number,
-  dropIndex: PropTypes.number,
+  dragQualityIndex: PropTypes.number,
+  dropQualityIndex: PropTypes.number,
+  dropPosition: PropTypes.string,
   qualityProfileItems: PropTypes.arrayOf(PropTypes.object).isRequired,
   errors: PropTypes.arrayOf(PropTypes.object),
   warnings: PropTypes.arrayOf(PropTypes.object),

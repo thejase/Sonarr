@@ -52,6 +52,7 @@ class QualityProfileItemGroup extends Component {
       allowed,
       items,
       sortIndex,
+      qualityIndex,
       isDragging,
       isDraggingUp,
       isDraggingDown,
@@ -154,6 +155,7 @@ class QualityProfileItemGroup extends Component {
                       items={items}
                       sortIndex={index}
                       groupIndex={sortIndex}
+                      qualityIndex={`${qualityIndex}.${index + 1}`}
                       isDragging={isDragging}
                       isDraggingUp={isDraggingUp}
                       isDraggingDown={isDraggingDown}
@@ -179,6 +181,7 @@ QualityProfileItemGroup.propTypes = {
   allowed: PropTypes.bool.isRequired,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
   sortIndex: PropTypes.number.isRequired,
+  qualityIndex: PropTypes.string.isRequired,
   isDragging: PropTypes.bool.isRequired,
   isDraggingUp: PropTypes.bool.isRequired,
   isDraggingDown: PropTypes.bool.isRequired,

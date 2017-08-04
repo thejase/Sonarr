@@ -12,45 +12,41 @@ const qualityProfileItemDragSource = {
   beginDrag(props) {
     const {
       editGroups,
-      groupId,
+      qualityIndex,
       qualityId,
-      sortIndex,
-      groupIndex,
       name,
       allowed
     } = props;
 
     return {
       editGroups,
-      groupId,
-      qualityId,
-      sortIndex,
-      groupIndex,
+      qualityIndex,
+      isGroup: !qualityId,
       name,
       allowed
     };
   },
 
   endDrag(props, monitor, component) {
-    props.onQualityProfileItemDragEnd(monitor.getItem(), monitor.didDrop());
+    props.onQualityProfileItemDragEnd(monitor.didDrop());
   }
 };
 
 const qualityProfileItemDropTarget = {
   hover(props, monitor, component) {
     const {
-      groupId: dragGroupId,
-      qualityId: dragQualityId,
-      sortIndex: dragIndex,
-      groupIndex: dragGroupIndex
+      qualityIndex: dragQualityIndex,
+      isGroup: isDragGroup
     } = monitor.getItem();
 
-    const hoverIndex = props.sortIndex;
-    const hoverGroupIndex = props.groupIndex;
-    const hoverGroupId = props.isInGroup ? props.groupId : null;
+    const dropQualityIndex = props.qualityIndex;
+    const isDropGroupItem = !!(props.qualityId && props.groupId);
 
     const hoverBoundingRect = findDOMNode(component).getBoundingClientRect();
-    const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+    // Target grows when a drop target is visible,
+    // also groups are taller, but this is reliable so far.
+    const middleDivisor = component.props.isOverCurrent ? 4 : 2;
+    const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / middleDivisor;
     const clientOffset = monitor.getClientOffset();
     const hoverClientY = clientOffset.y - hoverBoundingRect.top;
 
@@ -59,24 +55,31 @@ const qualityProfileItemDropTarget = {
       return;
     }
 
-    // Moving up, only trigger if drag position is above 50%
-    if (dragIndex < hoverIndex && hoverClientY > hoverMiddleY) {
+    // Don't show targets for dropping on self
+    if (dragQualityIndex === dropQualityIndex) {
       return;
     }
 
-    // Moving down, only trigger if drag position is below 50%
-    if (dragIndex > hoverIndex && hoverClientY < hoverMiddleY) {
+    // Don't allow a group to be dropped inside a group
+    if (isDragGroup && isDropGroupItem) {
+      return;
+    }
+
+    let dropPosition = null;
+
+    // Determine drop position based on position over target
+    if (hoverClientY > hoverMiddleY) {
+      dropPosition = 'below';
+    } else if (hoverClientY < hoverMiddleY) {
+      dropPosition = 'above';
+    } else {
       return;
     }
 
     props.onQualityProfileItemDragMove({
-      dragIndex,
-      dragGroupId,
-      dragQualityId,
-      dragGroupIndex,
-      dropIndex: hoverIndex,
-      dropGroupIndex: hoverGroupIndex,
-      dropGroupId: hoverGroupId
+      dragQualityIndex,
+      dropQualityIndex,
+      dropPosition
     });
   }
 };
@@ -110,6 +113,7 @@ class QualityProfileItemDragSource extends Component {
       allowed,
       items,
       sortIndex,
+      qualityIndex,
       isDragging,
       isDraggingUp,
       isDraggingDown,
@@ -155,6 +159,7 @@ class QualityProfileItemDragSource extends Component {
               allowed={allowed}
               items={items}
               sortIndex={sortIndex}
+              qualityIndex={qualityIndex}
               isDragging={isDragging}
               isDraggingUp={isDraggingUp}
               isDraggingDown={isDraggingDown}
@@ -177,6 +182,7 @@ class QualityProfileItemDragSource extends Component {
               name={name}
               allowed={allowed}
               sortIndex={sortIndex}
+              qualityIndex={qualityIndex}
               isDragging={isDragging}
               isOverCurrent={isOverCurrent}
               connectDragSource={connectDragSource}
@@ -207,6 +213,7 @@ QualityProfileItemDragSource.propTypes = {
   allowed: PropTypes.bool.isRequired,
   items: PropTypes.arrayOf(PropTypes.object),
   sortIndex: PropTypes.number.isRequired,
+  qualityIndex: PropTypes.string.isRequired,
   isDragging: PropTypes.bool,
   isDraggingUp: PropTypes.bool,
   isDraggingDown: PropTypes.bool,
